@@ -7,8 +7,9 @@ fi
 
 #Rename the forward and reverse for later use
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-	printf "\tPositional parameter 1: read1, Positional parameter 2: read2\n"
-	#printf "\t-trim: ONLY trim the adapters with default settings\n"
+	printf "\tPositional parameter 1: read1, Positional parameter 2: read2, Positional parameter 3: annotation, Positional parameter 4: ref genome.\n"
+	printf "\t-trim: ONLY trim the adapters with default settings. Postional parameter 1: read1, Positional parameter 2: read2.\n"
+	printf "\t-example: Download sample files from ENCODE and run the program."
 	exit 0
 fi
 
@@ -17,6 +18,23 @@ trim() {
 	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o R1.fastq.gz.adapterTrim.fastq.gz -p R2.fastq.gz.adapterTrim.fastq.gz $FILE1 $FILE2 > R1.fastq.gz.adapterTrim.metrics
 	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 5 --quality-cutoff 6 -m 18 -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o r1.adapterTrim.round2.fastq.gz -p r2.adapterTrim.round2.fastq.gz R1.fastq.gz.adapterTrim.fastq.gz R2.fastq.gz.adapterTrim.fastq.gz > R1.fastq.gz.adapterTrim.round2.metrics
 }
+
+get_sample_file() {
+	wget -O reads.R1.fastq.gz https://www.encodeproject.org/files/ENCFF173ODI/@@download/ENCFF173ODI.fastq.gz
+	wget -O reads.R2.fastq.gz https://www.encodeproject.org/files/ENCFF507EGU/@@download/ENCFF507EGU.fastq.gz
+	wget -O annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/gencode.v33.primary_assembly.annotation.gtf.gz
+	wget -O ref.GRCh38.fa.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/GRCh38.primary_assembly.genome.fa.gz
+}
+
+if [[ $1 == '-example' ]]; then
+	get_sample_file
+	FILE1=reads.R1.fastq.gz
+	FILE2=reads.R2.fastq.gz
+	ANNO=annotation.gtf.gz
+	REF=ref.GRCh38.fa.gz
+	trim
+	exit 0
+fi
 
 if [[ $1 == '-trim' ]]; then
 	FILE1=$2
