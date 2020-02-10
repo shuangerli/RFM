@@ -29,4 +29,5 @@ if [[ $# == 2 ]]; then
 	FILE1=$1
 	FILE2=$2
 	trim
+	exit 0
 fi
