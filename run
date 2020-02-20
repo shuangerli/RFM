@@ -110,6 +110,7 @@ pure_clip() {
 module load cutadapt/1.16
 module load samtools
 module load fastqc
+module load staraligner
 
 if [[ $1 == '-example' ]]; then
 	echo "Will download sample file and run the whole script."
