@@ -13,8 +13,8 @@ fi
 #Rename the forward and reverse for later use
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
 	printf "\tPositional parameter 1: rep1_read1, Positional parameter 2: rep1_read2, Positional parameter 3: rep2_read1, Positional parameter 4: rep2_read2, Positional parameter 5: annotation, Positional parameter 6: ref genome.\n"
-	printf "\t-example: Download sample files from ENCODE and run the program. Use replicate."
-	printf "\t-norep: Without replicate. Positional parameter 2: read1, Positional parameter 3: read2, Positional parameter 4: annotation, Positional parameter 5: ref genome."
+	printf "\t-example: Download sample files from ENCODE and run the program. Use replicate.\n"
+	printf "\t-norep: Without replicate. Positional parameter 2: read1, Positional parameter 3: read2, Positional parameter 4: annotation, Positional parameter 5: ref genome.\n"
 	printf "\t-trim: ONLY trim the adapters with default settings. Postional parameter 1: read1, Positional parameter 2: read2.\n"
 	exit 0
 fi
@@ -22,8 +22,8 @@ fi
 #Cutadapt TWO ROUNDS to cut adapters
 trim() {
 	printf "Running cutadapt round 1..."
-	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT  -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA  -A CTTGTAGATCGGAAG  -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG  -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT  -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o rep1/reads.R1.trimmed.fastq.gz -p rep1/reads.R2.trimmed.fastq.gz rep1/reads.R1.fastq.gz rep1/reads.R2.fastq.gz
-	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT  -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA  -A CTTGTAGATCGGAAG  -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG  -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT  -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o rep2/reads.R1.trimmed.fastq.gz -p rep2/reads.R2.trimmed.fastq.gz rep2/reads.R1.fastq.gz rep2/reads.R2.fastq.gz
+	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT  -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA  -A CTTGTAGATCGGAAG  -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG  -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT  -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o rep1/reads.R1.trimmed.fastq.gz -p rep1/reads.R2.trimmed.fastq.gz $FILE1 $FILE2
+	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT  -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA  -A CTTGTAGATCGGAAG  -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG  -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT  -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o rep2/reads.R1.trimmed.fastq.gz -p rep2/reads.R2.trimmed.fastq.gz $FILE3 $FILE4
 	printf "Running cutadapt round 2..."
 	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 5 --quality-cutoff 6 -m 18 -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o rep1/reads.R1.trimmed2.fastq.gz -p rep1/reads.R2.trimmed2.fastq.gz rep1/reads.R1.trimmed.fastq.gz rep1/reads.R2.trimmed.fastq.gz
 	cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 5 --quality-cutoff 6 -m 18 -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o rep2/reads.R1.trimmed2.fastq.gz -p rep2/reads.R2.trimmed2.fastq.gz rep2/reads.R1.trimmed.fastq.gz rep2/reads.R2.trimmed.fastq.gz
@@ -32,12 +32,18 @@ trim() {
 #Download example files
 get_sample_file() {
 	mkdir rep1 rep2
-	wget -O rep1/reads.R1.fastq.gz https://www.encodeproject.org/files/ENCFF173ODI/@@download/ENCFF173ODI.fastq.gz
-	wget -O rep1reads.R2.fastq.gz https://www.encodeproject.org/files/ENCFF507EGU/@@download/ENCFF507EGU.fastq.gz
-	wget -O rep2/reads.R1.fastq.gz https://www.encodeproject.org/files/ENCFF578XQC/@@download/ENCFF578XQC.fastq.gz
-	wget -O rep2/reads.R2.fastq.gz https://www.encodeproject.org/files/ENCFF735QHY/@@download/ENCFF735QHY.fastq.gz
-	wget -O annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/gencode.v33.primary_assembly.annotation.gtf.gz
-	wget -O ref.GRCh38.fa.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/GRCh38.primary_assembly.genome.fa.gz
+	echo "Downloading Replication 1 Read1..."
+	wget -O rep1/reads.R1.fastq.gz https://www.encodeproject.org/files/ENCFF173ODI/@@download/ENCFF173ODI.fastq.gz &> /dev/null
+	echo "Downloading Replication 1 Read2..."
+	wget -O rep1reads.R2.fastq.gz https://www.encodeproject.org/files/ENCFF507EGU/@@download/ENCFF507EGU.fastq.gz &> /dev/null
+	echo "Downloading Replication 2 Read1..."
+	wget -O rep2/reads.R1.fastq.gz https://www.encodeproject.org/files/ENCFF578XQC/@@download/ENCFF578XQC.fastq.gz &> /dev/null
+	echo "Downloading Replication 2 Read2..."
+	wget -O rep2/reads.R2.fastq.gz https://www.encodeproject.org/files/ENCFF735QHY/@@download/ENCFF735QHY.fastq.gz &> /dev/null
+	echo "Downloading annotation..."
+	wget -O annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/gencode.v33.primary_assembly.annotation.gtf.gz &> /dev/null
+	echo "Downloading reference genome..."
+	wget -O ref.GRCh38.fa.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/GRCh38.primary_assembly.genome.fa.gz &> /dev/null
 }
 
 #Prepare read IDs for UMI
@@ -102,6 +108,7 @@ module load samtools
 module load fastqc
 
 if [[ $1 == '-example' ]]; then
+	echo "Will download sample file and run the whole script."
 	get_sample_file
 	FILE1=rep1/reads.R1.fastq.gz
 	FILE2=rep1/reads.R2.fastq.gz
@@ -128,12 +135,13 @@ if [[ $1 == '-trim' ]]; then
 fi
 
 if [[ $# == 6 ]]; then
+	echo "Using user provided info."
 	FILE1=$1
 	FILE2=$2
 	FILE3=$3
 	FILE4=$4
-	FILE4=$5
-	FILE4=$6
+	ANNO=$5
+	REF=$6
 	trim
 	prep_read_ids
 	read_map_star
