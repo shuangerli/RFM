@@ -129,6 +129,7 @@ if [[ $1 == '-example' ]]; then
 	FILE4=rep2/reads.R2.fastq.gz
 	ANNO=annotation.gtf.gz
 	REF=ref.GRCh38.fa.gz
+	CLIPPER=clipper.bed.gz
 	trim
 	prep_read_ids
 	read_map_star
@@ -137,6 +138,7 @@ if [[ $1 == '-example' ]]; then
 	pool
 	qc
 	pure_clip
+	pras
 	exit 0
 fi
 
@@ -147,7 +149,7 @@ if [[ $1 == '-trim' ]]; then
 	exit 0
 fi
 
-if [[ $# == 6 ]]; then
+if [[ $# == 7 ]]; then
 	echo "Using user provided info."
 	FILE1=$1
 	FILE2=$2
@@ -155,6 +157,9 @@ if [[ $# == 6 ]]; then
 	FILE4=$4
 	ANNO=$5
 	REF=$6
+	CLIPPER=$7
+	mkdir rep1
+	mkdir rep2
 	trim
 	prep_read_ids
 	read_map_star
@@ -163,5 +168,6 @@ if [[ $# == 6 ]]; then
 	pool
 	qc
 	pure_clip
+	pras
 	exit 0
 fi
