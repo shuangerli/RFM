@@ -106,6 +106,12 @@ pure_clip() {
 	pureclip -i aligned.f.duplRm.pooled.R2.bam -bai aligned.f.duplRm.pooled.R2.bam.bai -g ref.hg19.fa -iv 'chr1;chr2;chr3;' -nt 10 -o PureCLIP.crosslink_sites.bed
 }
 
+pras() {
+	python src/script/PRAS_1.0.py -g $ANNO -t example_data/IDs.txt -i PureCLIP.crosslink_sites.bed -m check -s transcript -a Output.txt -w 10 -c 500 -p OutData
+	python src/PRASScore.py
+	bash ScoreCommand.txt
+}
+
 
 #Load all module required
 module load cutadapt/1.16
