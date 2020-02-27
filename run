@@ -4,8 +4,6 @@
 #SBATCH --ntasks-per-node 28
 #SBATCH -t 4:00:00
 
-CORE=8
-
 
 
 if [[ $# == 0 ]]; then
@@ -15,10 +13,11 @@ fi
 
 #Rename the forward and reverse for later use
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-	printf "\tPositional parameter 1: rep1_read1, Positional parameter 2: rep1_read2, Positional parameter 3: rep2_read1, Positional parameter 4: rep2_read2, Positional parameter 5: annotation, Positional parameter 6: ref genome.\n"
+	printf "\tPositional parameter 1: rep1_read1, Positional parameter 2: rep1_read2, Positional parameter 3: rep2_read1, Positional parameter 4: rep2_read2, Positional parameter 5: annotation, Positional parameter 6: ref genome, Positional parameter 7: Clipper output.\n"
 	printf "\t-example: Download sample files from ENCODE and run the program. Use replicate.\n"
-	printf "\t-norep: Without replicate. Positional parameter 2: read1, Positional parameter 3: read2, Positional parameter 4: annotation, Positional parameter 5: ref genome.\n"
+	printf "\t-norep: Without replicate. Positional parameter 2: read1, Positional parameter 3: read2, Positional parameter 4: annotation, Positional parameter 5: ref genome, Positional parameter 6: Clipper output.\n"
 	printf "\t-trim: ONLY trim the adapters with default settings. Postional parameter 1: read1, Positional parameter 2: read2.\n"
+	printf "\t-peak: ONLY get the peak calling result from PureClip."
 	exit 0
 fi
 
@@ -47,10 +46,12 @@ get_sample_file() {
 	wget -O annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/gencode.v33.primary_assembly.annotation.gtf.gz &> /dev/null
 	echo "Downloading reference genome..."
 	wget -O ref.GRCh38.fa.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/GRCh38.primary_assembly.genome.fa.gz &> /dev/null
+	echo "Downloading Clipper result..."
+	wget -O clipper.bed.gz https://www.encodeproject.org/files/ENCFF862EKD/@@download/ENCFF862EKD.bed.gz &> /dev/null
 	echo "All download finished..."
 }
 
-#Prepare read IDs for UMI
+#Prepare reads for UMI
 prep_read_ids() {
 	zcat rep1/reads.R1.trimmed2.fastq.gz > rep1/reads.R1.trimmed2.fastq
 	zcat rep1/reads.R2.trimmed2.fastq.gz > rep1/reads.R2.trimmed2.fastq
@@ -111,6 +112,7 @@ module load cutadapt/1.16
 module load samtools
 module load fastqc
 module load staraligner
+module load bedtools
 
 if [[ $1 == '-example' ]]; then
 	echo "Will download sample file and run the whole script."
