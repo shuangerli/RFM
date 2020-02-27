@@ -48,6 +48,8 @@ get_sample_file() {
 	wget -O ref.GRCh38.fa.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/GRCh38.primary_assembly.genome.fa.gz &> /dev/null
 	echo "Downloading Clipper result..."
 	wget -O clipper.bed.gz https://www.encodeproject.org/files/ENCFF862EKD/@@download/ENCFF862EKD.bed.gz &> /dev/null
+	echo "Downloading control file..."
+	wget -O control.bam https://www.encodeproject.org/files/ENCFF608WNY/@@download/ENCFF608WNY.bam &> /dev/null
 	echo "All download finished..."
 }
 
