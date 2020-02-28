@@ -68,28 +68,28 @@ prep_read_ids() {
 read_map_star() {
 	echo "Read mapping with star..."
 	mkdir genome_index
-	STAR --runThreadN 10 --runMode genomeGenerate --genomeDir genome_index/ --genomeFastaFiles $REF --sjdbGTFfile $ANNO --sjdbOverhang 49
+	STAR --runThreadN 10 --runMode genomeGenerate --genomeDir genome_index/ --genomeFastaFiles $REF --sjdbGTFfile $ANNO --sjdbOverhang 49 &> /dev/null
 	mkdir -p rep1/STAR
-	STAR --outSAMtype BAM SortedByCoordinate --runThreadN 10 --genomeDir genome_index/ --readFilesIn rep1/reads.R1.trimmed2.bc.fastq.gz rep1/reads.R2.trimmed2.bc.fastq.gz --readFilesCommand  zcat --outFilterType BySJout --outFilterMultimapNmax 1 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverLmax 0.04 --scoreDelOpen -1 --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000 --outFileNamePrefix rep1/STAR/ --alignEndsType EndToEnd
+	STAR --outSAMtype BAM SortedByCoordinate --runThreadN 10 --genomeDir genome_index/ --readFilesIn rep1/reads.R1.trimmed2.bc.fastq.gz rep1/reads.R2.trimmed2.bc.fastq.gz --readFilesCommand  zcat --outFilterType BySJout --outFilterMultimapNmax 1 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverLmax 0.04 --scoreDelOpen -1 --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000 --outFileNamePrefix rep1/STAR/ --alignEndsType EndToEnd &> /dev/null
 	mkdir -p rep2/STAR
-	STAR --outSAMtype BAM SortedByCoordinate --runThreadN 10 --genomeDir genome_index/ --readFilesIn rep2/reads.R1.trimmed2.bc.fastq.gz rep2/reads.R2.trimmed2.bc.fastq.gz --readFilesCommand  zcat --outFilterType BySJout --outFilterMultimapNmax 1 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverLmax 0.04 --scoreDelOpen -1 --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000 --outFileNamePrefix rep2/STAR/ --alignEndsType EndToEnd
+	STAR --outSAMtype BAM SortedByCoordinate --runThreadN 10 --genomeDir genome_index/ --readFilesIn rep2/reads.R1.trimmed2.bc.fastq.gz rep2/reads.R2.trimmed2.bc.fastq.gz --readFilesCommand  zcat --outFilterType BySJout --outFilterMultimapNmax 1 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverLmax 0.04 --scoreDelOpen -1 --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000 --outFileNamePrefix rep2/STAR/ --alignEndsType EndToEnd &> /dev/null
 }
 
 #samtools filtering
 samtools_filter() {
-	samtools index rep1/STAR/Aligned.sortedByCoord.out.bam
-	samtools view -hb -f 2 rep1/STAR/Aligned.sortedByCoord.out.bam -o rep1/aligned.f.bam chr1:1 chr2:1 chr3:1 chr4:1 chr5:1 chr6:1 chr7:1 chr8:1 chr9:1 chr10:1 chr11:1 chr12:1 chr13:1 chr14:1 chr15:1 chr16:1 chr17:1 chr18:1 chr19:1 chr20:1 chr21:1 chr22:1 chrX:1 chrY:1
-	samtools index rep1/aligned.f.bam
-	samtools index rep2/STAR/Aligned.sortedByCoord.out.bam
-	samtools view -hb -f 2 rep2/STAR/Aligned.sortedByCoord.out.bam -o rep2/aligned.f.bam chr1:1 chr2:1 chr3:1 chr4:1 chr5:1 chr6:1 chr7:1 chr8:1 chr9:1 chr10:1 chr11:1 chr12:1 chr13:1 chr14:1 chr15:1 chr16:1 chr17:1 chr18:1 chr19:1 chr20:1 chr21:1 chr22:1 chrX:1 chrY:1
-	samtools index rep2/aligned.f.bam
+	samtools index rep1/STAR/Aligned.sortedByCoord.out.bam &> /dev/null
+	samtools view -hb -f 2 rep1/STAR/Aligned.sortedByCoord.out.bam -o rep1/aligned.f.bam chr1:1 chr2:1 chr3:1 chr4:1 chr5:1 chr6:1 chr7:1 chr8:1 chr9:1 chr10:1 chr11:1 chr12:1 chr13:1 chr14:1 chr15:1 chr16:1 chr17:1 chr18:1 chr19:1 chr20:1 chr21:1 chr22:1 chrX:1 chrY:1 &> /dev/null
+	samtools index rep1/aligned.f.bam &> /dev/null
+	samtools index rep2/STAR/Aligned.sortedByCoord.out.bam &> /dev/null
+	samtools view -hb -f 2 rep2/STAR/Aligned.sortedByCoord.out.bam -o rep2/aligned.f.bam chr1:1 chr2:1 chr3:1 chr4:1 chr5:1 chr6:1 chr7:1 chr8:1 chr9:1 chr10:1 chr11:1 chr12:1 chr13:1 chr14:1 chr15:1 chr16:1 chr17:1 chr18:1 chr19:1 chr20:1 chr21:1 chr22:1 chrX:1 chrY:1 &> /dev/null
+	samtools index rep2/aligned.f.bam &> /dev/null
 }
 
 #PCR duplicate removal using UMI
 pcr_dup_rem() {
 	echo "Removing PCR duplicates..."
-	umi_tools dedup -I rep1/aligned.f.bam --paired -S rep1/aligned.f.duplRm.bam
-	umi_tools dedup -I rep2/aligned.f.bam --paired -S rep2/aligned.f.duplRm.bam
+	umi_tools dedup -I rep1/aligned.f.bam --paired -S rep1/aligned.f.duplRm.bam &> /dev/null
+	umi_tools dedup -I rep2/aligned.f.bam --paired -S rep2/aligned.f.duplRm.bam &> /dev/null
 }
 
 #Quality control
@@ -100,10 +100,10 @@ qc() {
 
 clam() {
 	echo "Peak calling with CLAM..."
-	CLAM realigner -i $CONTROL -o ./control/ --read-tagger-method start --retag --strandness opposite
-	CLAM realigner -i aligned.f.duplRm.rep1.bam -o ./rep1/ ----read-tagger-method start --retag  --strandness opposite
-	CLAM realigner -i aligned.f.duplRm.rep2.bam -o ./rep2/ --read-tagger-method start --retag  --strandness opposite
-	CLAM peakcaller -i rep1/unique.sorted.bam,rep2/unique.sorted.bam rep1/realigned.sorted.bam,rep2/realigned.sorted.bam -c control/unique.sorted.bam control/realigned.sorted.bam -o peak --unstranded --binsize 100 --unstranded --gtf $ANNO 
+	CLAM realigner -i $CONTROL -o ./control/ --read-tagger-method start --retag --strandness opposite &> /dev/null
+	CLAM realigner -i aligned.f.duplRm.rep1.bam -o ./rep1/ ----read-tagger-method start --retag  --strandness opposite &> /dev/null
+	CLAM realigner -i aligned.f.duplRm.rep2.bam -o ./rep2/ --read-tagger-method start --retag  --strandness opposite &> /dev/null
+	CLAM peakcaller -i rep1/unique.sorted.bam,rep2/unique.sorted.bam rep1/realigned.sorted.bam,rep2/realigned.sorted.bam -c control/unique.sorted.bam control/realigned.sorted.bam -o peak --unstranded --binsize 100 --unstranded --gtf $ANNO &> /dev/null
 }
 
 intersection() {
