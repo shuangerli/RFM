@@ -98,7 +98,7 @@ pcr_dup_rem() {
 #Quality control
 qc() {
 	mkdir fastqc_result
-	fastqc -o fastqc_result/ aligned.f.duplRm.pooled.R2.bam
+	fastqc -o fastqc_result/ narrow_peak.combined.bed
 }
 
 clam() {
@@ -175,6 +175,7 @@ if [[ $1 == '-peak' ]]; then
 	samtools_filter
 	pcr_dup_rem
 	clam
+	qc
 	exit 0
 fi
 
@@ -196,6 +197,7 @@ if [[ $1 == '-user' ]] && [[ $# == 9 ]]; then
 	samtools_filter
 	pcr_dup_rem
 	clam
+	qc
 	intersection
 	pras
 	exit 0
@@ -220,6 +222,7 @@ if [[ $1 == '-user' ]] && [[ $# == 10 ]]; then
 	samtools_filter
 	pcr_dup_rem
 	clam
+	qc
 	intersectionthree
 	pras
 	exit 0
