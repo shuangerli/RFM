@@ -15,7 +15,7 @@ fi
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
 	printf "\t-example: Download sample files from ENCODE and run the program. \n"
 	printf "\t-peak: ONLY get the peak calling result from CLAM. Same positional parameters, except no need for Clipper output.\n"
-	printf "\t-user: Positional parameter 2: rep1_read1, Positional parameter 3: rep1_read2, Positional parameter 4: rep2_read1, Positional parameter 5: rep2_read2, Positional parameter 6: annotation, Positional parameter 7: ref genome, Positional parameter 8: Clipper output, Positional parameter 9: control file\n"
+	printf "\t-user: Parameter 2: rep1_read1, Parameter 3: rep1_read2, Parameter 4: rep2_read1, Parameter 5: rep2_read2, Parameter 6: annotation, Parameter 7: ref genome, Parameter 8: control file, Parameter 9: another peak-caller output .bed file, [OPITONAL] Parameter 10: Another peak-caller output .bed file.\n"
 	exit 0
 fi
 
@@ -111,7 +111,12 @@ clam() {
 
 intersection() {
 	echo "Generating intersection of peak calling results..."
-	bedtools intersect -a narrow_peak.combined.bed -b $CLIPPER >intersect.bed
+	bedtools intersect -a narrow_peak.combined.bed -b $PEAKCALLERONE >intersect.bed
+}
+
+intersection() {
+	echo "Generating intersection of peak calling results..."
+	bedtools intersect -a narrow_peak.combined.bed -b $PEAKCALLERONE -c $PEAKCALLERTWO >intersect.bed
 }
 
 pras() {
@@ -140,7 +145,7 @@ if [[ $1 == '-example' ]]; then
 	FILE4=rep2/reads.R2.fastq.gz
 	ANNO=annotation.gtf
 	REF=ref.GRCh38.fa
-	CLIPPER=clipper.bed
+	PEAKCALLER1=clipper.bed
 	CONTROL=control.bam
 	trim
 	prep_read_ids
@@ -173,7 +178,7 @@ if [[ $1 == '-peak' ]]; then
 	exit 0
 fi
 
-if [[ $1 == '-user' ]]; then
+if [[ $1 == '-user' ]] && [[ $# == 9 ]]; then
 	echo "Using user provided info."
 	FILE1=$2
 	FILE2=$3
@@ -181,8 +186,8 @@ if [[ $1 == '-user' ]]; then
 	FILE4=$5
 	ANNO=$6
 	REF=$7
-	CLIPPER=$8
-	CONTROL=$9
+	CONTROL=$8
+	PEAKCALLER1=$9
 	mkdir rep1
 	mkdir rep2
 	trim
@@ -192,6 +197,30 @@ if [[ $1 == '-user' ]]; then
 	pcr_dup_rem
 	clam
 	intersection
+	pras
+	exit 0
+fi
+
+if [[ $1 == '-user' ]] && [[ $# == 10 ]]; then
+	echo "Using user provided info."
+	FILE1=$2
+	FILE2=$3
+	FILE3=$4
+	FILE4=$5
+	ANNO=$6
+	REF=$7
+	CONTROL=$8
+	PEAKCALLERONE=$9
+	PEAKCALLERTWO=${10}
+	mkdir rep1
+	mkdir rep2
+	trim
+	prep_read_ids
+	read_map_star
+	samtools_filter
+	pcr_dup_rem
+	clam
+	intersectionthree
 	pras
 	exit 0
 fi
