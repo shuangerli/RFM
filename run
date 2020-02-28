@@ -53,6 +53,7 @@ get_sample_file() {
 
 #Prepare reads for UMI
 prep_read_ids() {
+	echo "preparing read ids..."
 	zcat rep1/reads.R1.trimmed2.fastq.gz > rep1/reads.R1.trimmed2.fastq
 	zcat rep1/reads.R2.trimmed2.fastq.gz > rep1/reads.R2.trimmed2.fastq
 	awk -v l=10 'BEGIN{OFS=FS=" "} substr($1, 1, 1) == "@" {print "@" substr($1, (l+3), 500) "_" substr($1, 2, l) " " $2 }; substr($1, 1, 1) != "@" {print}; ' rep1/reads.R1.trimmed2.fastq  | gzip > rep1/reads.R1.trimmed2.bc.fastq.gz
@@ -65,6 +66,7 @@ prep_read_ids() {
 
 #Read mapping with STAR
 read_map_star() {
+	echo "Read mapping with star..."
 	mkdir genome_index
 	STAR --runThreadN 10 --runMode genomeGenerate --genomeDir genome_index/ --genomeFastaFiles $REF --sjdbGTFfile $ANNO --sjdbOverhang 49
 	mkdir -p rep1/STAR
@@ -85,6 +87,7 @@ samtools_filter() {
 
 #PCR duplicate removal using UMI
 pcr_dup_rem() {
+	echo "Removing PCR duplicates..."
 	umi_tools dedup -I rep1/aligned.f.bam --paired -S rep1/aligned.f.duplRm.bam
 	umi_tools dedup -I rep2/aligned.f.bam --paired -S rep2/aligned.f.duplRm.bam
 }
@@ -96,6 +99,7 @@ qc() {
 }
 
 clam() {
+	echo "Peak calling with CLAM..."
 	CLAM realigner -i $CONTROL -o ./control/ --read-tagger-method start --retag --strandness opposite
 	CLAM realigner -i aligned.f.duplRm.rep1.bam -o ./rep1/ ----read-tagger-method start --retag  --strandness opposite
 	CLAM realigner -i aligned.f.duplRm.rep2.bam -o ./rep2/ --read-tagger-method start --retag  --strandness opposite
@@ -103,13 +107,17 @@ clam() {
 }
 
 intersection() {
+	echo "Generating intersection of peak calling results..."
 	bedtools intersect -a narrow_peak.combined.bed -b $CLIPPER >Z.bed
 }
 
 pras() {
+	echo "scoring RBP with PRAS..."
 	python src/script/PRAS_1.0.py -g $ANNO -t example_data/IDs.txt -i intersect.bed -m check -s transcript -a Output.txt -w 10 -c 500 -p OutData
 	python src/PRASScore.py
 	bash ScoreCommand.txt
+	echo "binding_PRAS.txt contains result."
+	echo "finished :)"
 }
 
 
