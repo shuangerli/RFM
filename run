@@ -13,11 +13,9 @@ fi
 
 #Rename the forward and reverse for later use
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-	printf "\tPositional parameter 1: rep1_read1, Positional parameter 2: rep1_read2, Positional parameter 3: rep2_read1, Positional parameter 4: rep2_read2, Positional parameter 5: annotation, Positional parameter 6: ref genome, Positional parameter 7: Clipper output, Positional parameter 8: control file\n"
+	printf "\t-user: Positional parameter 2: rep1_read1, Positional parameter 3: rep1_read2, Positional parameter 4: rep2_read1, Positional parameter 5: rep2_read2, \nPositional parameter 6: annotation, Positional parameter 7: ref genome, Positional parameter 8: Clipper output, Positional parameter 9: control file\n"
 	printf "\t-example: Download sample files from ENCODE and run the program. Use replicate.\n"
-	printf "\t-norep: Without replicate. Positional parameter 2: read1, Positional parameter 3: read2, Positional parameter 4: annotation, Positional parameter 5: ref genome, Positional parameter 6: Clipper output.\n"
-	printf "\t-trim: ONLY trim the adapters with default settings. Postional parameter 1: read1, Positional parameter 2: read2.\n"
-	printf "\t-peak: ONLY get the peak calling result from PureClip."
+	printf "\t-peak: ONLY get the peak calling result from CLAM. Same positional parameters, except no need for Clipper output."
 	exit 0
 fi
 
@@ -101,7 +99,7 @@ clam() {
 	CLAM realigner -i $CONTROL -o ./control/ --read-tagger-method start --retag --strandness opposite
 	CLAM realigner -i aligned.f.duplRm.rep1.bam -o ./rep1/ ----read-tagger-method start --retag  --strandness opposite
 	CLAM realigner -i aligned.f.duplRm.rep2.bam -o ./rep2/ --read-tagger-method start --retag  --strandness opposite
-	CLAM peakcaller -i rep1/unique.sorted.bam,rep2/unique.sorted.bam rep1/realigned.sorted.bam,rep2/realigned.sorted.bam -c control/unique.sorted.bam control/realigned.sorted.bam -o peak --unstranded --binsize 100 --unstranded --gtf ./gencode.v33.primary_assembly.annotation.gtf 
+	CLAM peakcaller -i rep1/unique.sorted.bam,rep2/unique.sorted.bam rep1/realigned.sorted.bam,rep2/realigned.sorted.bam -c control/unique.sorted.bam control/realigned.sorted.bam -o peak --unstranded --binsize 100 --unstranded --gtf $ANNO 
 }
 
 intersection() {
@@ -144,23 +142,36 @@ if [[ $1 == '-example' ]]; then
 	exit 0
 fi
 
-if [[ $1 == '-trim' ]]; then
+if [[ $1 == '-peak' ]]; then
+	echo "Using user provided info. Output is narrow_peak.combined.bed."
 	FILE1=$2
 	FILE2=$3
+	FILE3=$4
+	FILE4=$5
+	ANNO=$6
+	REF=$7
+	CONTROL=$8
+	mkdir rep1
+	mkdir rep2
 	trim
+	prep_read_ids
+	read_map_star
+	samtools_filter
+	pcr_dup_rem
+	clam
 	exit 0
 fi
 
-if [[ $# == 7 ]]; then
+if [[ $1 == '-user' ]]; then
 	echo "Using user provided info."
-	FILE1=$1
-	FILE2=$2
-	FILE3=$3
-	FILE4=$4
-	ANNO=$5
-	REF=$6
-	CLIPPER=$7
-	CONTROL=$8
+	FILE1=$2
+	FILE2=$3
+	FILE3=$4
+	FILE4=$5
+	ANNO=$6
+	REF=$7
+	CLIPPER=$8
+	CONTROL=$9
 	mkdir rep1
 	mkdir rep2
 	trim
