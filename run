@@ -44,6 +44,7 @@ get_sample_file() {
 	wget -O annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/gencode.v33.primary_assembly.annotation.gtf.gz &> /dev/null
 	echo "Downloading reference genome..."
 	wget -O ref.GRCh38.fa.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/GRCh38.primary_assembly.genome.fa.gz &> /dev/null
+	gunzip ref.GRCh38.fa.gz
 	echo "Downloading Clipper result..."
 	wget -O clipper.bed.gz https://www.encodeproject.org/files/ENCFF862EKD/@@download/ENCFF862EKD.bed.gz &> /dev/null
 	echo "Downloading control file..."
@@ -136,7 +137,7 @@ if [[ $1 == '-example' ]]; then
 	FILE3=rep2/reads.R1.fastq.gz
 	FILE4=rep2/reads.R2.fastq.gz
 	ANNO=annotation.gtf.gz
-	REF=ref.GRCh38.fa.gz
+	REF=ref.GRCh38.fa
 	CLIPPER=clipper.bed.gz
 	CONTROL=control.bam
 	trim
