@@ -13,9 +13,9 @@ fi
 
 #Rename the forward and reverse for later use
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-	printf "\t-user: Positional parameter 2: rep1_read1, Positional parameter 3: rep1_read2, Positional parameter 4: rep2_read1, Positional parameter 5: rep2_read2, \nPositional parameter 6: annotation, Positional parameter 7: ref genome, Positional parameter 8: Clipper output, Positional parameter 9: control file\n"
-	printf "\t-example: Download sample files from ENCODE and run the program. Use replicate.\n"
+	printf "\t-example: Download sample files from ENCODE and run the program. \n"
 	printf "\t-peak: ONLY get the peak calling result from CLAM. Same positional parameters, except no need for Clipper output."
+	printf "\t-user: Positional parameter 2: rep1_read1, Positional parameter 3: rep1_read2, Positional parameter 4: rep2_read1, Positional parameter 5: rep2_read2, Positional parameter 6: annotation, Positional parameter 7: ref genome, Positional parameter 8: Clipper output, Positional parameter 9: control file\n"
 	exit 0
 fi
 
