@@ -187,7 +187,7 @@ if [[ $1 == '-user' ]] && [[ $# == 9 ]]; then
 	ANNO=$6
 	REF=$7
 	CONTROL=$8
-	PEAKCALLER1=$9
+	PEAKCALLERONE=$9
 	mkdir rep1
 	mkdir rep2
 	trim
