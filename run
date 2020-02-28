@@ -125,9 +125,9 @@ pras() {
 
 #Load all module required
 module load cutadapt/1.16
-module load samtools
+module load samtools/0.1.19
 module load fastqc
-module load staraligner
+module load staraligner/2.5.2b
 module load bedtools
 
 if [[ $1 == '-example' ]]; then
