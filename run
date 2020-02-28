@@ -48,6 +48,7 @@ get_sample_file() {
 	gunzip ref.GRCh38.fa.gz
 	echo "Downloading Clipper result..."
 	wget -O clipper.bed.gz https://www.encodeproject.org/files/ENCFF862EKD/@@download/ENCFF862EKD.bed.gz &> /dev/null
+	gunzip clipper.bed.gz
 	echo "Downloading control file..."
 	wget -O control.bam https://www.encodeproject.org/files/ENCFF608WNY/@@download/ENCFF608WNY.bam &> /dev/null
 	echo "All download finished..."
@@ -139,7 +140,7 @@ if [[ $1 == '-example' ]]; then
 	FILE4=rep2/reads.R2.fastq.gz
 	ANNO=annotation.gtf
 	REF=ref.GRCh38.fa
-	CLIPPER=clipper.bed.gz
+	CLIPPER=clipper.bed
 	CONTROL=control.bam
 	trim
 	prep_read_ids
