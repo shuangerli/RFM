@@ -109,7 +109,7 @@ clam() {
 
 intersection() {
 	echo "Generating intersection of peak calling results..."
-	bedtools intersect -a narrow_peak.combined.bed -b $CLIPPER >Z.bed
+	bedtools intersect -a narrow_peak.combined.bed -b $CLIPPER >intersect.bed
 }
 
 pras() {
