@@ -98,7 +98,9 @@ pcr_dup_rem() {
 #Quality control
 qc() {
 	mkdir fastqc_result
+	echo "Quality checking..."
 	fastqc -o fastqc_result/ narrow_peak.combined.bed
+	echo "Quality checking complete. You can see it at fastqc_result/"
 }
 
 clam() {
