@@ -7,7 +7,7 @@ Run the script with: `run [argument]`, `./run [argument]` or `slurm run [argumen
 
 Please use `run -h` to see instructions.
 
-For an example of the pipeline process, try `run -example`
+For an example of the pipeline process, try `run -example`.
 
 Note:
 
