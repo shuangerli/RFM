@@ -1,7 +1,7 @@
 import sys
 
 if __name__ == "__main__":
-	bedFile = "PureCLIP.crosslink_sites"
+	bedFile = "intersect"
 	inFile = open("OutData_500nt_PRAS_option_suggestions.txt", 'r')
 	A = inFile.read().splitlines()[1].split("	")
 	outFile = open("ScoreCommand.txt", 'w')
