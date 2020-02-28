@@ -114,7 +114,7 @@ intersection() {
 	bedtools intersect -a narrow_peak.combined.bed -b $PEAKCALLERONE >intersect.bed
 }
 
-intersection() {
+intersectionthree() {
 	echo "Generating intersection of peak calling results..."
 	bedtools intersect -a narrow_peak.combined.bed -b $PEAKCALLERONE -c $PEAKCALLERTWO >intersect.bed
 }
@@ -145,7 +145,7 @@ if [[ $1 == '-example' ]]; then
 	FILE4=rep2/reads.R2.fastq.gz
 	ANNO=annotation.gtf
 	REF=ref.GRCh38.fa
-	PEAKCALLER1=clipper.bed
+	PEAKCALLERONE=clipper.bed
 	CONTROL=control.bam
 	trim
 	prep_read_ids
